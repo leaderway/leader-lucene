@@ -6,6 +6,7 @@ import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -41,9 +42,16 @@ public class UserLibraryUtils {
                 String word = iterator.next();
                 if (StringUtils.isNotBlank(word)) {
                     //System.out.println("增加新词" + word);
-                    UserDefineLibrary.insertWord(word);
+                    String[] wordArray = word.split("\\s+");
+                    try {
+                        UserDefineLibrary.insertWord(wordArray[0], wordArray[1], Integer.parseInt(wordArray[2]));
+                    } catch (Exception e) {
+                        System.out.println("词典新增词语错误：词条为：" + word + "\n" + e);
+                    }
                 }
             }
+        } else {
+            throw new FileNotFoundException("字典文件不存在");
         }
     }
 

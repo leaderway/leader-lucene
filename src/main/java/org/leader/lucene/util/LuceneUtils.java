@@ -35,7 +35,7 @@ public class LuceneUtils {
     //使用静态代码块来导入新词典
     static {
         try {
-            UserLibraryUtils.insertWords("./dic/dic.dic");
+            UserLibraryUtils.insertWords("./library/dic.dic");
         } catch (IOException e) {
             e.printStackTrace();
         }

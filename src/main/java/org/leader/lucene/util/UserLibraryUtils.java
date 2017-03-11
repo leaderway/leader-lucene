@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
 
 /**
  * 用户自定义词典工具类
@@ -36,6 +37,31 @@ public class UserLibraryUtils {
      */
     public static void insertWords(String dicPath) throws IOException{
         File dicFile = FileUtils.getFile(dicPath);
+        if (dicFile.exists()) {
+            LineIterator iterator = FileUtils.lineIterator(dicFile);
+            while (iterator.hasNext()) {
+                String word = iterator.next();
+                if (StringUtils.isNotBlank(word)) {
+                    //System.out.println("增加新词" + word);
+                    String[] wordArray = word.split("\\s+");
+                    try {
+                        UserDefineLibrary.insertWord(wordArray[0], wordArray[1], Integer.parseInt(wordArray[2]));
+                    } catch (Exception e) {
+                        System.out.println("词典新增词语错误：词条为：" + word + "\n" + e);
+                    }
+                }
+            }
+        } else {
+            throw new FileNotFoundException("字典文件不存在");
+        }
+    }
+
+    /**
+     * 通过词典文件往字典中增加新词
+     * @param dicFile
+     * @throws IOException
+     */
+    public static void insertWords(File dicFile) throws IOException{
         if (dicFile.exists()) {
             LineIterator iterator = FileUtils.lineIterator(dicFile);
             while (iterator.hasNext()) {
